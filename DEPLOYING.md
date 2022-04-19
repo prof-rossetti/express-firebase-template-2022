@@ -62,6 +62,23 @@ At this point, you should be able to verify the production environment has been 
 heroku config
 ```
 
+## Buildpacks
+
+Configuring remote credentials file via a "buildpack" plugin:
+
+```sh
+heroku buildpacks:set heroku/nodejs
+heroku buildpacks:add https://github.com/s2t2/heroku-google-application-credentials-buildpack
+
+# stores contents of local credentials file (e.g. "google-credentials.json")
+# ... into an environment variable on the server
+# ... for use in conjunction with the buildpack, which then creates a file from those values
+heroku config:set GOOGLE_CREDENTIALS="$(< google-credentials.json)"
+```
+
+Next time you deploy, the products functionality should be working.
+
+
 ## Deploying
 
 After this configuration process is complete, you are finally ready to "deploy" the application's source code to the Heroku server:
@@ -71,6 +88,11 @@ git push heroku main
 ```
 
 > NOTE: any time you update your source code, you can repeat this deployment command to upload your new code onto the server
+
+
+
+
+
 
 ## Debugging
 

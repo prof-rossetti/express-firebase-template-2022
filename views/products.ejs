@@ -1,0 +1,36 @@
+<!-- this is the "views/products.ejs " file... -->
+
+<h1>Products</h1>
+
+<p className="lead">Browse products and services...</p>
+
+<!--
+    BOOTSTRAP GRID
+    https://getbootstrap.com/docs/5.0/layout/grid/#row-columns
+-->
+<div class="container">
+    <div class="row">
+    <% products.forEach(function(product){ %>
+        <div class="col">
+            <!--
+                BOOTSTRAP CARD
+                https://getbootstrap.com/docs/5.0/components/card/
+            -->
+            <div class="card" style="margin-bottom: 2em;">
+                <img src="<%= product['url'] %>" class="card-img-top" alt="photo of <%= product['name'] %>">
+                <div class="card-body">
+                    <h5 class="card-title"><%= product["name"] %></h5>
+                    <p class="card-text"><%= product["description"] %></p>
+
+                    <form action="/orders" method="POST">
+                        <input type="hidden" name="productId" value="<%= product['id'] %>">
+                        <input type="hidden" name="productName" value="<%= product['name'] %>">
+                        <input type="hidden" name="productPrice" value="<%= product['price'] %>">
+                        <button class="btn btn-primary">Order Now!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+    </div>
+</div>

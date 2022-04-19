@@ -31,13 +31,13 @@ router.post('/dashboard', function(req, res, next) {
 
         var latestClose = Object.values(data["Time Series (Daily)"])[0]["5. adjusted close"]
 
-        //req.flash("success", "Stock Data Request Success!")
+        req.flash("success", "Stock Data Request Success!")
         res.render("stocks_dashboard", {symbol: symbol, data: JSON.stringify(data), latestClose: latestClose});
       })
     .catch(function(err){
       console.log("STOCK DATA ERROR:", err)
 
-      //req.flash("danger", "OOPS, Please check your inputs and try again.")
+      req.flash("danger", "OOPS, Please check your inputs and try again.")
       res.redirect("/stocks/form")
     })
 });

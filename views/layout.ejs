@@ -12,6 +12,31 @@
 <body>
 
     <!--
+        FLASH MESSAGES
+        https://github.com/escaladesports/express-flash-messages
+    -->
+    <div class="flash-container">
+        <% const messages = getMessages() %>
+
+        <% if (messages) { %>
+            <% Object.entries(messages).forEach((obj) => { %>
+                <% var category = obj[0] %>
+                <% var message = obj[1] %>
+
+                <!--
+                    BOOTSTRAP ALERTS
+                    https://getbootstrap.com/docs/5.0/components/alerts/#dismissing
+                -->
+                <div class="alert alert-<%= category %> alert-dismissible fade show" role="alert" style="margin-bottom:0;">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <%= message %>
+                </div>
+
+            <% }) %>
+        <% } %>
+    </div>
+
+    <!--
         BOOTSTRAP NAV
         https://getbootstrap.com/docs/5.0/components/navbar/
     -->

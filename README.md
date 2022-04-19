@@ -24,10 +24,16 @@ Install Packages:
 npm install
 ```
 
+Install the "nodemon" development server that saves time during development:
+
+```sh
+npm install nodemon -g
+```
+
 ## Usage
 
 Run the local web server (then visit http://localhost:3000/ in the browser):
 
 ```sh
-npm start
+npm run start-dev
 ```

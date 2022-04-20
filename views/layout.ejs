@@ -72,14 +72,16 @@
                         <a class="nav-link" href="/products">Products</a>
                     </li>
 
-                    <!-- TODO: check the session to see if user is logged in and display either login or profile link -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
+                    <% if (locals.user) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/profile">Profile</a>
+                        </li>
+                    <%} else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                    <% } %>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/profile">Profile</a>
-                    </li>
 
                 </ul>
             </div>

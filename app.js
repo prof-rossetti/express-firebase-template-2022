@@ -18,7 +18,35 @@ var productsRouter = require('./routes/products');
 var SESSION_SECRET = process.env.SESSION_SECRET || "super secret" // set to secure value in production
 
 
+//
+// AUTH ... h/t: https://raw.githubusercontent.com/kriscfoster/node-google-oauth-2/master/auth.js
+//
 
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
+
+var GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "OOPS"
+var GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "OOPS"
+var GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback"
+
+passport.use(new GoogleStrategy({
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: GOOGLE_CALLBACK_URL,
+      passReqToCallback: true, // adds req to the callback function params
+  },
+  function(request, accessToken, refreshToken, profile, done) {
+      return done(null, profile);
+}));
+
+
+passport.serializeUser(function(user, done) { done(null, user); });
+passport.deserializeUser(function(user, done) { done(null, user); });
+
+
+//
+// APP
+//
 
 var app = express();
 
@@ -34,64 +62,61 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
 app.use(session({
-  cookie: { maxAge: 60000},
-  secret: SESSION_SECRET,
-  name: 'stocks-app-session',
-  resave: true,
-  saveUninitialized: true
+    cookie: { maxAge: 60000},
+    secret: SESSION_SECRET,
+    name: 'stocks-app-session',
+    resave: false, // true
+    saveUninitialized: true
 }));
 app.use(flash())
-
-
-
-
-
-//
-// PASSPORT AUTH (LOGIN WITH GOOGLE)
-//
-
-const passport = require('passport');
-//const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const GoogleStrategy = require('passport-google-oauth2').Strategy;
-
-var GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "OOPS"
-var GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "OOPS"
-var GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback"
-
 app.use(passport.initialize());
 app.use(passport.session());
 
 
 
-passport.serializeUser(function(user, callback) {
-  callback(null, user);
+
+//
+// AUTH ROUTES
+//
+
+app.use(function(req, res, next) {
+    // add user variable to be accessed by all pages
+    // even if there is no user, so the page can check accordingly
+    // h/t: https://stackoverflow.com/questions/37183766/how-to-get-the-session-value-in-ejs
+    //res.locals.user = req.session.user;
+    res.locals.user = req.user; // in this case we are storing as req.user
+    next();
 });
 
-passport.deserializeUser(function(obj, callback) {
-  callback(null, obj);
+function isLoggedIn(req, res, next) {
+    //req.user ? next() : res.sendStatus(401);
+    if (req.user) {
+        next()
+    } else {
+        // deny access
+        req.flash("danger", "OOPS, please login first.")
+        res.redirect("/login")
+    }
+}
+
+app.get('/login', function(req, res, next) {
+    console.log("LOGIN PAGE...")
+    res.render('login');
 });
 
+app.get('/auth/google/login',
+    passport.authenticate('google', { scope : ['profile', 'email'] })
+);
 
-//// done is not a function (with passReqToCallback : true)
-// https://github.com/jaredhanson/passport/issues/421
+app.get('/auth/google/callback',
+    passport.authenticate('google', {
+      successRedirect: '/user/profile',
+      failureRedirect: '/auth/google/failure'
+    })
+);
 
-passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: GOOGLE_CALLBACK_URL,
-    passReqToCallback : true
-  },
-  //function(accessToken, refreshToken, profile, done) {
-  //    console.log("PASSPORT AUTHENTICATING USER...")
-  //    console.log(profile)
-  //    return done(null, profile);
-  //}
-  function(request, accessToken, refreshToken, profile, done) {
-    console.log("PASSPORT AUTHENTICATING USER...")
-    //console.log("REQUEST:", req)
-    console.log("ACCESS TOKEN:", accessToken)
-    console.log("REFRESH TOKEN:", refreshToken)
-    console.log("PROFILE:", profile)
+app.get('/user/profile', isLoggedIn, (req, res) => {
+    console.log("USER:", req.user)
     //> {
     //>   provider: 'google',
     //>   sub: '...',
@@ -115,57 +140,26 @@ passport.use(new GoogleStrategy({
     //>   picture: 'https://lh3.googleusercontent.com/a-/...',
     //> }
 
-    return done(profile);
-  }
-));
-
-
-
-app.get('/login', function(req, res, next) {
-    console.log("LOGIN PAGE...")
-    res.render('login');
+    //res.send(`Hello ${req.user.displayName}`);
+    res.render("user_profile", {user: req.user})
 });
 
-app.get('/auth/google/login',
-  passport.authenticate('google', { scope : ['profile', 'email'] })
-);
+app.get('/auth/google/failure', (req, res) => {
+    //res.send('OOPS LOGIN FAILURE. PLEASE TRY AGAIN');
+    req.flash("danger", "OOPS, authentication error. Please try again.")
+    res.redirect("/login")
+});
 
-//app.get('/auth/google/callback',
-//  passport.authenticate('google', {
-//    //successRedirect: '/auth/google/success',
-//    failureRedirect: '/auth/google/error'
-//  }),
-//  function(req, res) {
-//    console.log("GOOGLE LOGIN CALLBACK...")
-//
-//
-//    console.log("USER INFO:", userProfile)
-//
-//    res.redirect('/user/profile');
-//
-//    // todo: get userProfile
-//    //res.redirect('/user/profile', {user: userProfile});
-//  }
-//);
+app.get('/logout', (req, res) => {
+    req.logout();
+    //req.session.destroy();
+    // can't clear the whole session because ... ERR "getMessages() requires sessions"
 
-app.get('/auth/google/callback',
-  passport.authenticate('google', {
-    //session: false
-    successRedirect: '/auth/google/success',
-    failureRedirect: '/auth/google/error'
-  })
-);
+    //res.send('Goodbye!');
+    req.flash("warning", "Logout successful. See you again soon!")
+    res.redirect("/")
+});
 
-app.get('/auth/google/error', (req, res) => res.send("error logging in"));
-app.get('/auth/google/success', (req, res) => res.send(profile) );
-
-//app.get("/user/profile", (req, res) => {
-// console.log("USER PROFILE...", req);
-// //console.log(profile)
-// //res.render('user_profile');
-// var profile = {displayName: "User 1"}
-// res.redirect('/user/profile', {user: profile});
-//});
 
 
 

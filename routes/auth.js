@@ -1,117 +1,81 @@
-//var express = require('express');
-//var router = express.Router();
+//// h/t: https://raw.githubusercontent.com/kriscfoster/node-google-oauth-2/master/auth.js
+//
+//const passport = require('passport');
+//const GoogleStrategy = require('passport-google-oauth2').Strategy;
+//
+//var GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "OOPS"
+//var GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "OOPS"
+//var GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback"
 //
 //
-//router.get('/login', function(req, res, next) {
-//    console.log("LOGIN PAGE...")
-//
-//    res.render('login');
-//});
-//
-//
-//router.get('/auth/google/login', function(req, res, next) {
-//    console.log("GOOGLE LOGIN...")
-//
-//    res.render('GOOGLE LOGIN');
-//});
+//passport.use(new GoogleStrategy({
+//  clientID: process.env.GOOGLE_CLIENT_ID,
+//  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//  callbackURL: "http://localhost:5000/auth/google/callback",
+//  passReqToCallback: true,
+//},
+//function(request, accessToken, refreshToken, profile, done) {
+//  return done(null, profile);
+//}));
 //
 //
-//router.get('/auth/google/callback', function(req, res, next) {
-//    console.log("CALLBACK")
+//passport.serializeUser(function(user, done) { done(null, user); });
+//passport.deserializeUser(function(user, done) { done(null, user); });
+
+
+
+
+
+
+
+//passport.use(new GoogleStrategy({
+//    clientID: GOOGLE_CLIENT_ID,
+//    clientSecret: GOOGLE_CLIENT_SECRET,
+//    callbackURL: GOOGLE_CALLBACK_URL,
+//    passReqToCallback : true
+//  },
+//  //function(accessToken, refreshToken, profile, done) {
+//  //    console.log("PASSPORT AUTHENTICATING USER...")
+//  //    console.log(profile)
+//  //    return done(null, profile);
+//  //}
+//  function(request, accessToken, refreshToken, profile, done) {
+//    console.log("PASSPORT AUTHENTICATING USER...")
+//    //console.log("REQUEST:", req)
+//    console.log("ACCESS TOKEN:", accessToken)
+//    console.log("REFRESH TOKEN:", refreshToken)
+//    console.log("PROFILE:", profile)
+//    //> {
+//    //>   provider: 'google',
+//    //>   sub: '...',
+//    //>   id: '...',
+//    //>   displayName: 'First M Last',
+//    //>   name: { givenName: 'First M', familyName: 'Last' },
+//    //>   given_name: 'First M',
+//    //>   family_name: 'Last',
+//    //>   email_verified: true,
+//    //>   verified: true,
+//    //>   language: 'en',
+//    //>   locale: undefined,
+//    //>   email: 'hello@gmail.com',
+//    //>   emails: [ { value: 'hello@gmail.com', type: 'account' } ],
+//    //>   photos: [
+//    //>     {
+//    //>       value: 'https://lh3.googleusercontent.com/a-/...',
+//    //>       type: 'default'
+//    //>     }
+//    //>   ],
+//    //>   picture: 'https://lh3.googleusercontent.com/a-/...',
+//    //> }
 //
-//    res.render('CALLBACK');
-//});
-//
-//
-//
-//module.exports = router;
+//    return done(profile);
+//  }
+//));
 
 
 
+//passport.serializeUser(function(user, callback) { callback(null, user); });
+//passport.deserializeUser(function(obj, callback) { callback(null, obj); });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//@auth_routes.route("/login")
-//def login():
-//    print("LOGIN...")
-//    # this is a login page for either google or email/password auth (but the latter not implemented at the moment):
-//    return render_template("login.html")
-//    # if not using email/password auth, consider shortcut directly to google login:
-//    #return redirect("/auth/google/login")
-//
-//@auth_routes.route("/auth/google/login")
-//def google_login():
-//    print("GOOGLE OAUTH LOGIN...")
-//    oauth = current_app.config["OAUTH"]
-//    redirect_uri = url_for("auth_routes.google_oauth_callback", _external=True) # see corresponding route below
-//    return oauth.google.authorize_redirect(redirect_uri) # send the user to login with google, then hit the callback route
-//
-//@auth_routes.route("/auth/google/callback")
-//def google_oauth_callback():
-//    print("GOOGLE OAUTH CALLBACK...")
-//    oauth = current_app.config["OAUTH"]
-//    token = oauth.google.authorize_access_token()
-//    user_info = token.get("userinfo")
-//    if user_info:
-//        print("STORING USER INFO IN THE SESSION...")
-//        #print(user_info)
-//        #> {
-//        #>     'iss': 'https://accounts.google.com',
-//        #>     'azp': '__________.apps.googleusercontent.com',
-//        #>     'aud': '__________.apps.googleusercontent.com',
-//        #>     'sub': '__________',
-//        #>     'email': 'example@gmail.com',
-//        #>     'email_verified': True,
-//        #>     'at_hash': '__________',
-//        #>     'nonce': '__________',
-//        #>     'name': 'First M Last',
-//        #>     'picture': 'https://lh3.googleusercontent.com/a-/__________',
-//        #>     'given_name': 'First M',
-//        #>     'family_name': 'Last',
-//        #>     'locale': 'en',
-//        #>     'iat': __________,
-//        #>     'exp': __________
-//        #> }
-//        print("USER INFO:", user_info["email"], user_info["name"], user_info["locale"])
-//
-//        # add user info to the session
-//        session["current_user"] = user_info
-//
-//        # store the user info in the database:
-//        #service = current_app.config["FIREBASE_SERVICE"]
-//        #service.update_user({
-//        #    "email": user_info["email"],
-//        #    "verified": user_info["email_verified"],
-//        #    "given_name": user_info["given_name"],
-//        #    "family_name": user_info["family_name"],
-//        #    "picture": user_info["picture"],
-//        #    "locale": user_info["locale"],
-//        #})
-//
-//    else:
-//        print("NO USER INFO")
-//    return redirect("/")
-//
-//@auth_routes.route("/logout")
-//def logout():
-//    print("LOGGING OUT...")
-//    session.pop("current_user", None) # remove user info from the session
-//    return redirect("/")
-//
+//passport.serializeUser(function(user, done) { done(null, user); });
+//passport.deserializeUser(function(user, done) { done( null, user); }); // this is where you might fetch a user record from the database. see http://www.passportjs.org/docs/configure/#sessions

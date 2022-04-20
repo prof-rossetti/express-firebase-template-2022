@@ -10,9 +10,26 @@ Google Login via Passport.js References:
   + [Medium Article by @prashantramnyc](https://medium.com/@prashantramnyc/how-to-implement-google-authentication-in-node-js-using-passport-js-9873f244b55e)
   + [`passport-google-oauth2` Package Docs](https://www.passportjs.org/packages/passport-google-oauth2/)
   + https://www.makeuseof.com/nodejs-google-authentication/
+  + https://github.com/kriscfoster/node-google-oauth-2/blob/master/index.js
 
 From scratch:
 
 ```sh
 npm install passport express-session passport-google-oauth2  --save
 ```
+
+This isn't working when user visits other pages:
+
+```html
+<% if (locals.user) { %>
+    <li class="nav-item">
+        <a class="nav-link" href="/user/profile">Profile</a>
+    </li>
+<%} else { %>
+    <li class="nav-item">
+        <a class="nav-link" href="/login">Login</a>
+    </li>
+<% } %>
+```
+
+... but here is a workaround: https://stackoverflow.com/questions/37183766/how-to-get-the-session-value-in-ejs

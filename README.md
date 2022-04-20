@@ -8,6 +8,15 @@ References:
   + [Course Exercise](https://github.com/prof-rossetti/internet-technologies/blob/main/exercises/express-app/exercise.md)
   + [Mozilla Tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/skeleton_website)
 
+
+![screenshot of a page of products](https://user-images.githubusercontent.com/1328807/164246231-fe1ea33e-0c3a-44de-9ef9-f1120bc62a39.png)
+
+## Prerequisites
+
+  + Node.js
+  + Git
+
+
 ## Installation
 
 Make a copy of this template repository. "Clone" or download the repo onto your local computer, for example onto the Desktop. Navigate there from the command line:

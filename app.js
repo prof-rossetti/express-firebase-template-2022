@@ -139,6 +139,7 @@ app.get('/user/profile', isLoggedIn, (req, res) => {
     //>   ],
     //>   picture: 'https://lh3.googleusercontent.com/a-/...',
     //> }
+    //console.log(req.user.email, req.user.displayName, req.user.picture)
 
     //res.send(`Hello ${req.user.displayName}`);
     res.render("user_profile", {user: req.user})

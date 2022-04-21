@@ -3,10 +3,7 @@
 
 <h1>User Orders</h1>
 
-Orders: <%= orders.length %>
-
-
-<% if (orders.length > 0) { %>
+<% if (orders.length == 0) { %>
     <p class="lead">Oh, you have not yet placed an order. Please visit the
         <a href="/products">products page</a>!
     </p>
@@ -39,10 +36,16 @@ Orders: <%= orders.length %>
                         <%= order.product_info.name %>
                     </td>
                     <td>
-                        <%= order.product_info.price%>
+                        <%= order.product_info.price %>
                     </td>
                     <td>
-                        <%= order.order_at.strftime('%Y-%m-%d %H:%M') %> UTC
+                        <!--% order.order_at.toDate().toUTCString() %-->
+
+                        <% var myDate = order.order_at.toDate() %>
+                        <% var ymd = myDate.toISOString().slice(0,10) %>
+                        <% var hms = myDate.toLocaleTimeString() %>
+                        <%= ymd + " " + hms %> UTC
+
                     </td>
                 </tr>
             <% }); %>

@@ -33,3 +33,17 @@ This isn't working when user visits other pages:
 ```
 
 ... but here is a workaround: https://stackoverflow.com/questions/37183766/how-to-get-the-session-value-in-ejs
+
+
+JavaScript dates:
+  +  https://docs.ispsystem.com/billmanager/fine-tuning/ejs-templates/ejs-code-syntax
+
+
+```html
+ <% order.order_at.toDate().toUTCString() %>
+
+<% var myDate = order.order_at.toDate() %>
+<% var y = myDate.getFullYear() %>
+<% var m = String(myDate.getMonth() + 1).padStart(2, '0') %>
+<% var d = String(myDate.getDate()).padStart(2, '0'); %>
+```

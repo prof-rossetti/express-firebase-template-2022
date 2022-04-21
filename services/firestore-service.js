@@ -73,10 +73,20 @@ async function fetchUserOrders(userEmail) {
 
     // see: https://firebase.google.com/docs/firestore/query-data/queries
     var docs = await db.collection("orders").where('user_email', '==', userEmail).get()
+    // sorting requires configuration of a composite index on the "orders" collection,
+    // ... so to keep it simple for students, we'll sort manually (see below)
     console.log("DOCS:", docs.size)
 
     var orders = parseDocs(docs)
     console.log("ORDERS:", orders.length)
+
+
+    orders = orders.sort(function(a,b){
+        // these will be firestore Timestamp objects, so let's convert them to dates
+        return b["order_at"] - a["order_at"]
+        //return b["order_at"].toDate() - a["order_at"].toDate()
+    })
+
     return orders
 }
 

@@ -3,13 +3,16 @@
 
 <h1>User Orders</h1>
 
-<p class="lead">Here are your recent orders:</p>
+Orders: <%= orders.length %>
 
-<% if (orders) { %>
+
+<% if (orders.length > 0) { %>
     <p class="lead">Oh, you have not yet placed an order. Please visit the
         <a href="/products">products page</a>!
     </p>
 <%} else { %>
+    <p class="lead">Here are your recent orders:</p>
+
     <div class="table-responsive">
         <table class="table table-hover text-center">
             <thead>

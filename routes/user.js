@@ -52,7 +52,7 @@ router.get('/user/orders', isLoggedIn, async (req, res) => {
 });
 
 
-router.get('/user/orders/create', isLoggedIn, async (req, res) => {
+router.post('/user/orders/create', isLoggedIn, async (req, res) => {
     var email = req.user.email
     console.log("CREATE ORDER...", email)
 

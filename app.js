@@ -10,9 +10,10 @@ var session = require('express-session')
 var flash = require('express-flash-messages')
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var booksRouter = require('./routes/books');
 var stocksRouter = require('./routes/stocks')
 var productsRouter = require('./routes/products');
+var userRouter = require('./routes/user');
 //var authRouter = require('./routes/auth');
 
 var SESSION_SECRET = process.env.SESSION_SECRET || "super secret" // set to secure value in production
@@ -88,16 +89,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-function isLoggedIn(req, res, next) {
-    //req.user ? next() : res.sendStatus(401);
-    if (req.user) {
-        next()
-    } else {
-        // deny access
-        req.flash("danger", "OOPS, please login first.")
-        res.redirect("/login")
-    }
-}
+
 
 app.get('/login', function(req, res, next) {
     console.log("LOGIN PAGE...")
@@ -115,35 +107,6 @@ app.get('/auth/google/callback',
     })
 );
 
-app.get('/user/profile', isLoggedIn, (req, res) => {
-    console.log("USER:", req.user)
-    //> {
-    //>   provider: 'google',
-    //>   sub: '...',
-    //>   id: '...',
-    //>   displayName: 'First M Last',
-    //>   name: { givenName: 'First M', familyName: 'Last' },
-    //>   given_name: 'First M',
-    //>   family_name: 'Last',
-    //>   email_verified: true,
-    //>   verified: true,
-    //>   language: 'en',
-    //>   locale: undefined,
-    //>   email: 'hello@gmail.com',
-    //>   emails: [ { value: 'hello@gmail.com', type: 'account' } ],
-    //>   photos: [
-    //>     {
-    //>       value: 'https://lh3.googleusercontent.com/a-/...',
-    //>       type: 'default'
-    //>     }
-    //>   ],
-    //>   picture: 'https://lh3.googleusercontent.com/a-/...',
-    //> }
-    //console.log(req.user.email, req.user.displayName, req.user.picture)
-
-    //res.send(`Hello ${req.user.displayName}`);
-    res.render("user_profile", {user: req.user})
-});
 
 app.get('/auth/google/failure', (req, res) => {
     //res.send('OOPS LOGIN FAILURE. PLEASE TRY AGAIN');
@@ -171,10 +134,11 @@ app.get('/logout', (req, res) => {
 
 
 // routes
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', indexRouter); // anchor relative to homepage
+app.use('/', booksRouter); // anchor relative to homepage
 app.use('/stocks', stocksRouter)
 app.use('/', productsRouter); // anchor relative to homepage
+app.use('/', userRouter); // anchor relative to homepage
 //app.use('/', authRouter); // anchor relative to homepage
 
 

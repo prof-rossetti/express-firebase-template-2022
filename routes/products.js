@@ -5,17 +5,20 @@ var router = express.Router();
 
 const {fetchProducts} = require("../services/firestore-service")
 
+// GET /products
 router.get('/products', async function(req, res, next) {
     try {
         var products = await fetchProducts()
 
         res.render("products", {"products": products})
     } catch (error) {
+        console.log("ERR:", error)
         req.flash("danger", "OOPS, failed to fetch products.")
         res.redirect("/")
     }
 })
 
+// POST /orders
 router.post('/orders', function(req, res, next) {
     console.log("FORM DATA", req.body)
     var productId = req.body.productId

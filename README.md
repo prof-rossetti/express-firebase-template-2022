@@ -2,12 +2,6 @@
 
 # Express.js App Template
 
-References:
-
-  + [Express.js Docs](https://expressjs.com/en/starter/generator.html)
-  + [Course Exercise](https://github.com/prof-rossetti/internet-technologies/blob/main/exercises/express-app/exercise.md)
-  + [Mozilla Tutorial](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/skeleton_website)
-
 
 ![screenshot of a page of products](https://user-images.githubusercontent.com/1328807/164246231-fe1ea33e-0c3a-44de-9ef9-f1120bc62a39.png)
 

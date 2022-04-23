@@ -9,6 +9,8 @@ var expressLayouts = require('express-ejs-layouts');
 var session = require('express-session')
 var flash = require('express-flash-messages')
 
+var passport = require('./services/passport-auth');
+
 var indexRouter = require('./routes/index');
 var booksRouter = require('./routes/books');
 var stocksRouter = require('./routes/stocks')
@@ -17,33 +19,6 @@ var userRouter = require('./routes/user');
 //var authRouter = require('./routes/auth');
 
 var SESSION_SECRET = process.env.SESSION_SECRET || "super secret" // set to secure value in production
-
-
-//
-// AUTH ... h/t: https://raw.githubusercontent.com/kriscfoster/node-google-oauth-2/master/auth.js
-//
-
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth2').Strategy;
-
-var GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "OOPS"
-var GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "OOPS"
-var GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback"
-
-passport.use(new GoogleStrategy({
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: GOOGLE_CALLBACK_URL,
-      passReqToCallback: true, // adds req to the callback function params
-  },
-  function(request, accessToken, refreshToken, profile, done) {
-      return done(null, profile);
-}));
-
-
-passport.serializeUser(function(user, done) { done(null, user); });
-passport.deserializeUser(function(user, done) { done(null, user); });
-
 
 //
 // APP

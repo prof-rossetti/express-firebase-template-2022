@@ -38,7 +38,7 @@ router.get('/user/profile', isLoggedIn, (req, res) => {
 
 
 router.get('/user/orders', isLoggedIn, async (req, res) => {
-    var email = "prof.mj.rossetti@gmail.com" //req.user.email
+    var email = req.user.email
     console.log("USER ORDERS...", email)
 
     try {

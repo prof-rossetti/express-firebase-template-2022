@@ -10,19 +10,16 @@ var session = require('express-session')
 var flash = require('express-flash-messages')
 
 var passport = require('./services/passport-auth');
+var authRouterConfig = require('./routes/auth');
 
 var indexRouter = require('./routes/index');
 var booksRouter = require('./routes/books');
 var stocksRouter = require('./routes/stocks')
 var productsRouter = require('./routes/products');
 var userRouter = require('./routes/user');
-//var authRouter = require('./routes/auth');
 
 var SESSION_SECRET = process.env.SESSION_SECRET || "super secret" // set to secure value in production
 
-//
-// APP
-//
 
 var app = express();
 
@@ -48,74 +45,14 @@ app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-
-
-//
-// AUTH ROUTES
-//
-
-app.use(function(req, res, next) {
-    // add user variable to be accessed by all pages
-    // even if there is no user, so the page can check accordingly
-    // h/t: https://stackoverflow.com/questions/37183766/how-to-get-the-session-value-in-ejs
-    //res.locals.user = req.session.user;
-    res.locals.user = req.user; // in this case we are storing as req.user
-    next();
-});
-
-
-
-app.get('/login', function(req, res, next) {
-    console.log("LOGIN PAGE...")
-    res.render('login');
-});
-
-app.get('/auth/google/login',
-    passport.authenticate('google', { scope : ['profile', 'email'] })
-);
-
-app.get('/auth/google/callback',
-    passport.authenticate('google', {
-      successRedirect: '/user/profile',
-      failureRedirect: '/auth/google/failure'
-    })
-);
-
-
-app.get('/auth/google/failure', (req, res) => {
-    //res.send('OOPS LOGIN FAILURE. PLEASE TRY AGAIN');
-    req.flash("danger", "OOPS, authentication error. Please try again.")
-    res.redirect("/login")
-});
-
-app.get('/logout', (req, res) => {
-    req.logout();
-    //req.session.destroy();
-    // can't clear the whole session because ... ERR "getMessages() requires sessions"
-
-    //res.send('Goodbye!');
-    req.flash("warning", "Logout successful. See you again soon!")
-    res.redirect("/")
-});
-
-
-
-
-
-
-
-
-
-
 // routes
-app.use('/', indexRouter); // anchor relative to homepage
-app.use('/', booksRouter); // anchor relative to homepage
+var authRouter = authRouterConfig(passport) // need to pass passport after the initialization step above
+app.use('/', authRouter);
+app.use('/', indexRouter);
+app.use('/', booksRouter);
 app.use('/stocks', stocksRouter)
-app.use('/', productsRouter); // anchor relative to homepage
-app.use('/', userRouter); // anchor relative to homepage
-//app.use('/', authRouter); // anchor relative to homepage
-
+app.use('/', productsRouter);
+app.use('/', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

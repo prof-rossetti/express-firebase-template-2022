@@ -30,7 +30,6 @@ var authRouterConfig = function(passport) {
         //req.session.destroy();
         // can't clear the whole session because ... ERR "getMessages() requires sessions"
 
-        //res.send('Goodbye!');
         req.flash("warning", "Logout successful. See you again soon!")
         res.redirect("/")
     });

@@ -32,7 +32,6 @@ router.get('/user/profile', isLoggedIn, (req, res) => {
     //> }
     //console.log(req.user.email, req.user.displayName, req.user.picture)
 
-    //res.send(`Hello ${req.user.displayName}`);
     res.render("user_profile", {user: req.user})
 });
 

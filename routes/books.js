@@ -19,7 +19,7 @@ router.get('/api/books/:id', function(req, res, next) {
   // just some dummy data using the id variable
   var book = {"id": bookId, "title": "Example Book", "year": 2000} // some dummy / placeholder data
 
-  res.send(user);
+  res.send(book);
 });
 
 module.exports = router;

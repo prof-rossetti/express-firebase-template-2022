@@ -1,4 +1,4 @@
-# Express App Exercise Part 6: Deploying to Production
+# Deployment Guide
 
 ## References
 
@@ -6,9 +6,7 @@
 
 ## Prerequisites
 
-If you haven't yet done so, [sign up for a Heroku account](https://signup.heroku.com/) and [install the Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install). The Heroku CLI may require installation of the Git CLI (see [Node.js Development Environment Setup Guide](/exercises/local-dev-setup/exercise.md#git-cli)).
-
-> NOTE: Mac users may first need to [install Homebrew](https://github.com/prof-rossetti/intro-to-python/blob/master/notes/clis/brew.md).
+If you haven't yet done so, [sign up for a Heroku account](https://signup.heroku.com/) and [install the Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install). The Heroku CLI may require installation of the Git CLI (see [Node.js Development Environment Setup Guide](/exercises/local-dev-setup/exercise.md#git-cli)), and Mac users may first need to [install Homebrew](https://github.com/prof-rossetti/intro-to-python/blob/master/notes/clis/brew.md).
 
 After installing the Heroku CLI, make sure you can login and list your applications:
 
@@ -24,10 +22,10 @@ heroku apps # at this time, results might be empty-ish
 
 > IMPORTANT: run the following commands from the root directory of your project repository!
 
-Use the online [Heroku Dashboard](https://dashboard.heroku.com/) or the command-line (instructions below) to [create a new application server](https://dashboard.heroku.com/new-app), specifying a globally-unique name (e.g. "stocks-app-123", but yours will need to be different):
+Use the online [Heroku Dashboard](https://dashboard.heroku.com/) or the command-line (instructions below) to [create a new application server](https://dashboard.heroku.com/new-app), specifying a globally-unique name (e.g. "my-app-123", but yours will need to be different):
 
 ```sh
-heroku create stocks-app-123 # choose your own unique name!
+heroku create my-app-123 # choose your own unique name!
 ```
 
 Verify the app has been created:
@@ -42,6 +40,12 @@ Also verify this step has associated the local repo with a remote address called
 git remote -v
 ```
 
+## Callback URL Setup
+
+Note the unique name of your app (e.g. "my-app-123"), and take a moment to register another callback url via the [Google API Credentials OAuth Console](https://console.cloud.google.com/apis/credentials?project=web-app-templates-2022).
+
+The new production callback url should be "https://`YOUR_APP`.herokuapp.com/auth/google/callback" (where `YOUR_APP` is the unique name of your application, e.g. "my-app-123").
+
 ## Server Configuration
 
 Before we copy the source code to the remote server, we need to configure the server's environment in a similar way we configured our local environment.
@@ -53,6 +57,12 @@ Instead of using a ".env" file, we will directly configure the server's environm
 ```sh
 # setting environment variables:
 heroku config:set ALPHAVANTAGE_API_KEY="________"
+
+heroku config:set GOOGLE_CLIENT_ID="______.apps.googleusercontent.com"
+heroku config:set GOOGLE_CLIENT_SECRET="______"
+
+# this is used for customizing the callback url, matching the callback url you registered via google console
+heroku config:set GOOGLE_CALLBACK_URL="https://YOUR_APP.herokuapp.com/auth/google/callback"
 ```
 
 At this point, you should be able to verify the production environment has been configured with the proper environment variable values:
@@ -62,7 +72,7 @@ At this point, you should be able to verify the production environment has been 
 heroku config
 ```
 
-## Buildpacks
+### Buildpacks
 
 Configuring remote credentials file via a "buildpack" plugin:
 
@@ -75,8 +85,6 @@ heroku buildpacks:add https://github.com/s2t2/heroku-google-application-credenti
 # ... for use in conjunction with the buildpack, which then creates a file from those values
 heroku config:set GOOGLE_CREDENTIALS="$(< google-credentials.json)"
 ```
-
-Next time you deploy, the products functionality should be working.
 
 
 ## Deploying
@@ -96,13 +104,13 @@ git push heroku main
 
 ## Debugging
 
-Open your app's URL in the browser:
+Opening your app's URL in the browser:
 
 ```sh
 heroku open
 ```
 
-And see there are some errors. Let's view the errors:
+If you encounter errors, viewing the server logs can help you identify the source of the issue:
 
 ```sh
 heroku logs --tail

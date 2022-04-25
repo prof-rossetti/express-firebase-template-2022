@@ -1,0 +1,55 @@
+
+
+
+<h1>User Orders</h1>
+
+<% if (orders.length == 0) { %>
+    <p class="lead">Oh, you have not yet placed an order. Please visit the
+        <a href="/products">products page</a>!
+    </p>
+<%} else { %>
+    <p class="lead">Here are your recent orders:</p>
+
+    <div class="table-responsive">
+        <table class="table table-hover text-center">
+            <thead>
+                <tr>
+                    <th scope="col">Order Id</th>
+                    <th scope="col">User Email</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Product Price</th>
+                    <th scope="col">Timestamp</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            <% orders.forEach(function(order){ %>
+
+                <tr>
+                    <td>
+                        <%= order.id %>
+                    </td>
+                    <td>
+                        <%= order.user_email %>
+                    </td>
+                    <td>
+                        <%= order.product_info.name %>
+                    </td>
+                    <td>
+                        <%= order.product_info.price %>
+                    </td>
+                    <td>
+                        <!--% order.order_at.toDate().toUTCString() %-->
+
+                        <% var myDate = order.order_at.toDate() %>
+                        <% var ymd = myDate.toISOString().slice(0,10) %>
+                        <% var hms = myDate.toLocaleTimeString() %>
+                        <%= ymd + " " + hms %>
+
+                    </td>
+                </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    </div>
+<% } %>

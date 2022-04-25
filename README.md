@@ -15,6 +15,8 @@ This application requires a Node.js development environment:
 
 For beginners, here are some instructions for how to [set up your local Node.js development environment](https://github.com/prof-rossetti/internet-technologies/blob/main/exercises/local-dev-setup/exercise.md).
 
+For students looking for more context about the frameworks and tools used, feel free to consult this [Express App Exercise](https://github.com/prof-rossetti/internet-technologies/blob/main/exercises/express-app/exercise.md), which walks you through the process of creating an Express.js app from scratch.
+
 ## Repo Setup
 
 Make a copy of this template repo (as necessary). Clone your copy of the repo onto your local machine. Navigate there from the command-line:

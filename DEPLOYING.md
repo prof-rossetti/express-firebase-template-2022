@@ -62,13 +62,16 @@ Instead of using a ".env" file, we will directly configure the server's environm
 
 ```sh
 # setting environment variables:
+
 heroku config:set ALPHAVANTAGE_API_KEY="________"
 
 heroku config:set GOOGLE_CLIENT_ID="______.apps.googleusercontent.com"
 heroku config:set GOOGLE_CLIENT_SECRET="______"
-
-# this is used for customizing the callback url, matching the callback url you registered via google console
+# this is used for customizing the callback url, matching the callback url you registered via google console:
 heroku config:set GOOGLE_CALLBACK_URL="https://YOUR_APP.herokuapp.com/auth/google/callback"
+
+# choose your own secret string value instead of xyz999:
+heroku config:set SESSION_SECRET="xyz99999"
 ```
 
 At this point, you should be able to verify the production environment has been configured with the proper environment variable values:

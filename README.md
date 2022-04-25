@@ -5,7 +5,6 @@ A web application starter template, created in Node.js with the Express framewor
 
 ![screenshot of a page of products](https://user-images.githubusercontent.com/1328807/164246231-fe1ea33e-0c3a-44de-9ef9-f1120bc62a39.png)
 
-![](https://user-images.githubusercontent.com/1328807/160312385-7ffbbada-4363-4b48-873d-9eca868afef0.png)
 
 ## Prerequisites
 

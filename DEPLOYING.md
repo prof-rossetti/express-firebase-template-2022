@@ -8,6 +8,9 @@
 
 If you haven't yet done so, [sign up for a Heroku account](https://signup.heroku.com/) and [install the Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install). The Heroku CLI may require installation of the Git CLI (see [Node.js Development Environment Setup Guide](/exercises/local-dev-setup/exercise.md#git-cli)), and Mac users may first need to [install Homebrew](https://github.com/prof-rossetti/intro-to-python/blob/master/notes/clis/brew.md).
 
+> NOTE: if you are having issues using the command-line and/or installing the Heroku CLI, you might alternatively try to set up ["Automatic Deploys"](https://devcenter.heroku.com/articles/github-integration#automatic-deploys) through the Heroku online interface, such that any time we push code to GitHub, it will automatically also get uploaded to the server. If you do this, you'll need to find the interface equivalents for some of the `heroku` commands below (feel free to ask the prof for help).
+
+
 After installing the Heroku CLI, make sure you can login and list your applications:
 
 ```sh
@@ -17,6 +20,9 @@ heroku apps # at this time, results might be empty-ish
 ```
 
 > NOTE: some students have reported that when running `heroku login` in Git Bash, it hangs after their successful login. If this is the case for you, close that Git Bash window and when you open a new one you should be all set.
+
+
+
 
 ## Server Setup
 

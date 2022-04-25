@@ -82,20 +82,12 @@
                         <a class="nav-link" href="/products">Products</a>
                     </li>
 
+                    <!-- only displaying these routes if the user is logged in... -->
                     <% if (locals.user) { %>
+
                         <li class="nav-item">
                             <a class="nav-link" href="/user/orders">Orders</a>
                         </li>
-
-                        <!--li class="nav-item">
-                            <a class="nav-link" href="/user/profile">Profile</a>
-                        </li-->
-
-                        <!--li class="nav-item">
-                            <a href="/user/profile" style="padding:5px;">
-                                <img class="rounded-circle" src="<%= locals.user.picture || 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png' %>" alt="profile photo" height="32px" width="32px">
-                            </a>
-                        </li-->
 
                         <a href="/user/profile" style="padding:5px;">
                             <img class="rounded-circle" src="<%= locals.user.picture || 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png' %>" alt="profile photo" height="32px" width="32px">

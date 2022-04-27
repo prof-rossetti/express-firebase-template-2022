@@ -95,6 +95,7 @@ heroku buildpacks:add https://github.com/s2t2/heroku-google-application-credenti
 heroku config:set GOOGLE_CREDENTIALS="$(< google-credentials.json)"
 ```
 
+> NOTE: if the last command about setting the `GOOGLE_CREDENTIALS` environment variable doesn't work (for example if you're having filepath reference issues on Windows), then you always have the option of setting the environment variable via the "Config Vars" server settings menu on Heroku - copy the contents of the local "google-credentials.json" file and paste the entire structure into the values field. 
 
 ## Deploying
 

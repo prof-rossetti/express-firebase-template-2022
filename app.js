@@ -35,11 +35,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
 app.use(session({
-    cookie: { maxAge: 60000},
+    cookie: {
+      maxAge: (5 * 60 * 1000) // milliseconds from now (MIN * SEC/MIN * MILLISEC/SEC)
+    },
     secret: SESSION_SECRET,
     name: 'stocks-app-session',
-    resave: false, // true
-    saveUninitialized: true
+    //resave: false, // true
+    //saveUninitialized: true
+    overwrite: true,
 }));
 app.use(flash())
 app.use(passport.initialize());

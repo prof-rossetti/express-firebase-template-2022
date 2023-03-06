@@ -16,6 +16,7 @@ GOOGLE_CLIENT_ID="______.apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET="______"
 GOOGLE_CALLBACK_URL="https://YOUR_RENDER_APP.onrender.com/auth/google/callback"
 GOOGLE_CREDENTIALS_FILEPATH="/etc/secrets/google-credentials.json"
+SESSION_SECRET="YOUR SECRET HERE"
 ```
 
 Set "google-credentials.json" file as a [secret](https://community.render.com/t/using-google-application-credentials-json/6885). The service will then have access to the file as "/etc/secrets/google-credentials.json".

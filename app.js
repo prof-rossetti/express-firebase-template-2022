@@ -6,7 +6,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressLayouts = require('express-ejs-layouts');
-var session = require('express-session')
+var session = require('cookie-session')
 var flash = require('express-flash-messages')
 
 var passport = require('./services/passport-auth');

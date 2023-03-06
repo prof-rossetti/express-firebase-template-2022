@@ -5,11 +5,6 @@ var GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "OOPS"
 var GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "OOPS"
 var GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback"
 // ... set the callback url to "https://YOUR_APP.com/auth/google/callback" in production
-// debugging:
-console.log("CLIENT ID:", GOOGLE_CLIENT_ID)
-console.log("CLIENT SECRET:", GOOGLE_CLIENT_SECRET)
-console.log("CALLBACK URL:", GOOGLE_CALLBACK_URL)
-
 
 passport.use(new GoogleStrategy({
       clientID: GOOGLE_CLIENT_ID,

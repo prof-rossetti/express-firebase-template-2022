@@ -2,7 +2,9 @@
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 
-const serviceAccountCreds = require('../google-credentials.json'); // assumes you downloaded the credentials file here
+
+const serviceAccountFilepath = process.env.GOOGLE_CREDENTIALS_FILEPATH || '../google-credentials.json'
+const serviceAccountCreds = require(serviceAccountFilepath); // assumes you downloaded the credentials file here
 
 initializeApp({credential: cert(serviceAccountCreds)});
 
